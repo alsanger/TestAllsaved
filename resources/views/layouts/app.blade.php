@@ -10,17 +10,30 @@
     @yield('styles')
 </head>
 <body>
-<!-- Навігаційна панель -->
-@include('components.navbar')
-
 <div class="container-fluid">
     <div class="row">
+        <!-- Навігаційна панель зверху -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{ route('dashboard') }}">TestAllsaved</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+
         <!-- Бічне меню -->
-        @include('components.sidebar')
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky pt-5">
+                @include('components.sidebar')
+            </div>
+        </div>
 
         <!-- Основний контент -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @yield('content')
+            <div class="container mt-5 pt-3">
+                @yield('content')
+            </div>
         </main>
     </div>
 </div>

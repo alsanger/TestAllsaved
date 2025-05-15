@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Task;
+use App\Repositories\TaskRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Service for handling task operations
@@ -11,39 +13,70 @@ use Illuminate\Database\Eloquent\Collection;
 class TaskService
 {
     /**
+     * The task repository instance
+     *
+     * @var TaskRepository
+     */
+    protected TaskRepository $taskRepository;
+
+    /**
+     * Create a new service instance
+     *
+     * @param TaskRepository $taskRepository
+     * @return void
+     */
+    public function __construct(TaskRepository $taskRepository)
+    {
+        $this->taskRepository = $taskRepository;
+    }
+
+    /**
      * Get all tasks from the database
      *
-     * @return Collection
+     * @param int $perPage
+     * @return LengthAwarePaginator
      */
-    public function getAllTasks()
+    public function getAllTasks(int $perPage = 10): LengthAwarePaginator
     {
-        // Отримання всіх задач з бази даних
-        return Task::orderBy('priority', 'desc')->get();
+        // Отримання всіх задач через репозиторій
+        return $this->taskRepository->getAll($perPage);
+    }
+
+    /**
+     * Get task by ID
+     *
+     * @param int $id
+     * @return Task|null
+     */
+    public function getTaskById(int $id): ?Task
+    {
+        // Отримання задачі за ідентифікатором через репозиторій
+        return $this->taskRepository->findById($id);
     }
 
     /**
      * Create a new task
      *
-     * @param array $data
+     * @param array $validatedData
      * @return Task
      */
-    public function createTask(array $data): Task
+    public function createTask(array $validatedData): Task
     {
-        // Створення нової задачі
-        return Task::create($data);
+        // Створення нової задачі через репозиторій
+        return $this->taskRepository->create($validatedData);
     }
 
     /**
      * Update an existing task
      *
      * @param Task $task
-     * @param array $data
+     * @param array $validatedData
      * @return bool
      */
-    public function updateTask(Task $task, array $data): bool
+    public function updateTask(Task $task, array $validatedData): bool
     {
-        // Оновлення існуючої задачі
-        return $task->update($data);
+        // Оновлення існуючої задачі через репозиторій
+        return $this->taskRepository->update($task, $validatedData);
     }
 
     /**
@@ -54,7 +87,18 @@ class TaskService
      */
     public function deleteTask(Task $task): ?bool
     {
-        // Видалення задачі
-        return $task->delete();
+        // Видалення задачі через репозиторій
+        return $this->taskRepository->delete($task);
+    }
+
+    /**
+     * Get tasks dashboard statistics
+     *
+     * @return array
+     */
+    public function getDashboardStats(): array
+    {
+        // Отримання статистики для дашборду
+        return $this->taskRepository->getCountByStatus();
     }
 }

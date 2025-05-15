@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Http\Requests\TaskRequest;
+use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Services\TaskService;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 /**
@@ -18,7 +20,7 @@ class TaskController extends Controller
      *
      * @var TaskService
      */
-    protected $taskService;
+    protected TaskService $taskService;
 
     /**
      * Create a new controller instance
@@ -57,12 +59,16 @@ class TaskController extends Controller
     /**
      * Store a newly created task in storage
      *
-     * @param Request $request
+     * @param TaskRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(TaskRequest $request): RedirectResponse
     {
-        $this->taskService->createTask($request->all());
+        // Валідація вже відбулася в TaskRequest
+        $validatedData = $request->validated();
+
+        // Створення задачі через сервіс
+        $this->taskService->createTask($validatedData);
 
         return redirect()->route('tasks.index')
             ->with('success', 'Задачу успішно створено');
@@ -93,13 +99,17 @@ class TaskController extends Controller
     /**
      * Update the specified task in storage
      *
-     * @param Request $request
+     * @param TaskRequest $request
      * @param Task $task
      * @return RedirectResponse
      */
-    public function update(Request $request, Task $task): RedirectResponse
+    public function update(TaskRequest $request, Task $task): RedirectResponse
     {
-        $this->taskService->updateTask($task, $request->all());
+        // Валідація вже відбулася в TaskRequest
+        $validatedData = $request->validated();
+
+        // Оновлення задачі через сервіс
+        $this->taskService->updateTask($task, $validatedData);
 
         return redirect()->route('tasks.index')
             ->with('success', 'Задачу успішно оновлено');
@@ -113,6 +123,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task): RedirectResponse
     {
+        // Видалення задачі через сервіс
         $this->taskService->deleteTask($task);
 
         return redirect()->route('tasks.index')
