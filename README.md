@@ -63,3 +63,9 @@ A Laravel application with Bootstrap templates and task management functionality
 - Bootstrap 5
 - PHP 8.1+
 - MySQL
+
+## Author
+
+[LinkedIn](https://www.linkedin.com/in/oleksandr-s-59b495363/)  
+[DOU Profile](https://dou.ua/users/a-san/)  
+[GitHub](https://github.com/alsanger)

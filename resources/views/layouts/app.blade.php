@@ -12,15 +12,8 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <!-- Навігаційна панель зверху -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ route('dashboard') }}">TestAllsaved</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </nav>
+        <!-- Замените весь навбар на подключение компонента -->
+        @include('components.navbar')
 
         <!-- Бічне меню -->
         <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
